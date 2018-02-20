@@ -16,6 +16,6 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... strings) {
-		CsvViewer.runApplication(strings);
+//		CsvViewer.runApplication(strings);
 	}
 }
