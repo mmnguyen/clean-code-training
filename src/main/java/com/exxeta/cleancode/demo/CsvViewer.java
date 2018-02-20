@@ -22,6 +22,8 @@ public class CsvViewer {
         memory.setRows(getRowsNumber(args));
         memory.setPageNumber(Pagination.getFirstPage());
 //        PageManager.extractPage(memory);
+        UIViewer uiViewer = new UIViewer();
+        uiViewer.updateView(memory.getAdresses()); //TODO pass only first-page addresses to the view
     }
 
     private String getCsvPath(String [] args) {
@@ -45,7 +47,8 @@ public class CsvViewer {
     }
 
     public void firstPage() {
-
+        //UIViewer uiViewer = new UIViewer();
+        //uiViewer.updateView(ADDRESSES_WHICH_ARE_ON_THE_FIRST_PAGE);
     }
 
     public void previousPage() {

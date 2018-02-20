@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -16,6 +17,12 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... strings) {
-//		CsvViewer.runApplication(strings);
+		CsvViewer csvViewer = new CsvViewer();
+		try {
+			csvViewer.startCsvViewer(strings);
+		}
+		catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
