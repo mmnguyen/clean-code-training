@@ -23,28 +23,6 @@ public class CsvViewer {
         }
     }
 
-    public void UserInput(String command) {
-        // TODO
-        do {
-            switch (command) {
-                case "f":
-                    // call firstPage
-                    // param list of Address with n lines
-                    // print table output
-                    break;
-                case "p":
-                    // call firstPage
-                    // param list of Address with n lines
-                    // print table output
-                    break;
-                case "n":
-                    break;
-                case "l":
-                    break;
-            }
-        } while (!command.equals("e"));
-    }
-
     public void startCsvViewer(String args) throws IOException {
         // Do some shit with args
         // get filename & get rawline number
