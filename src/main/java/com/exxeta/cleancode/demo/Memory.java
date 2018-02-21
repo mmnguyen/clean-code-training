@@ -30,4 +30,6 @@ public class Memory {
     public void setRows(Integer rows) {
         this.rows = rows;
     }
+
+
 }

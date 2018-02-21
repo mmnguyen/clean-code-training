@@ -49,6 +49,14 @@ public class CsvViewer {
     public void firstPage() {
         //UIViewer uiViewer = new UIViewer();
         //uiViewer.updateView(ADDRESSES_WHICH_ARE_ON_THE_FIRST_PAGE);
+
+        memory.setPageNumber(Pagination.getFirstPage());
+        // calc how many page
+        System.out.println("maximal pagination with thins applicaiton is " + memory.getAdresses().size() / memory.getRows());
+        for (int i = 0; i < memory.getRows(); i++) {
+            System.out.println(memory.getAdresses().get(i));
+        }
+
     }
 
     public void previousPage() {
