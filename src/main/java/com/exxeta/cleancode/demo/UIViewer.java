@@ -12,7 +12,6 @@ public class UIViewer {
 		this.getColumnWidths();
 		this.printTable();
 		this.printMenu();
-		this.getUserInput();
 	}
 	
     public void getColumnWidths() {
@@ -80,30 +79,34 @@ public class UIViewer {
     	System.out.println("Thanks for using CsvViewer! Godbye :)");
     }
     
-	private void getUserInput() {
+	public void getUserInput(CsvViewer csvViewer) {
 		Scanner scanner = new Scanner(System.in);
 		String userInput = "";
-		userInput = scanner.nextLine();;
-		scanner.close();
-		CsvViewer csvViewer = new CsvViewer();
+		userInput = scanner.nextLine();
         switch (userInput) {
         	case "F":
 	            csvViewer.firstPage();
+	            scanner.close();
 	            break;
         	case "P":
 	            csvViewer.previousPage();
+	            scanner.close();
 	            break;
         	case "N":
 	            csvViewer.nextpage();
+	            scanner.close();
 	            break;
         	case "L":
 	            csvViewer.lastPage();
+	            scanner.close();
 	            break;
         	case "E":
 	            this.sayGoodbye();
+	            scanner.close();
 	            break;
 	        default:
 	        	this.printMenu();
+	        	scanner.close();
 	        	break;
         }
 	}

@@ -23,8 +23,9 @@ public class CsvViewer {
         memory.setRows(getRowsNumber(args));
         memory.setPageNumber(Pagination.getFirstPage());
 //        PageManager.extractPage(memory);
-        UIViewer uiViewer = new UIViewer();
-        uiViewer.updateView(firstPage()); //TODO pass only first-page addresses to the view
+
+        firstPage(); //TODO pass only first-page addresses to the view
+
 //        firstPage().forEach(System.out::println);
     }
 
@@ -48,14 +49,18 @@ public class CsvViewer {
         return rowNumber.get();
     }
 
-    public List<Adress> firstPage() {
+    public void firstPage() {
         //UIViewer uiViewer = new UIViewer();
         //uiViewer.updateView(ADDRESSES_WHICH_ARE_ON_THE_FIRST_PAGE);
 
         memory.setPageNumber(Pagination.getFirstPage());
         // calc how many page
         System.out.println("maximal pagination with thins applicaiton is " + memory.getAdresses().size() / memory.getRows());
-        return getPageElements(0, memory.getRows());
+        List<Adress> adresses =  getPageElements(0, memory.getRows());
+        
+        UIViewer uiViewer = new UIViewer();
+        uiViewer.updateView(adresses); 
+        uiViewer.getUserInput(this);
     }
 
     public List<Adress> getPageElements(int page, int rows) {
@@ -71,14 +76,29 @@ public class CsvViewer {
     }
 
     public void previousPage() {
-
+    	int previousPageIndex = Pagination.getPreviousPage(memory);
+    	List<Adress> adresses = getPageElements(previousPageIndex, memory.getRows());
+    	memory.setPageNumber(previousPageIndex);
+        UIViewer uiViewer = new UIViewer();
+        uiViewer.updateView(adresses);
+        uiViewer.getUserInput(this);
     }
 
     public void nextpage() {
-
+    	int nextPageIndex = Pagination.getNextPage(memory);
+    	List<Adress> adresses = getPageElements(nextPageIndex, memory.getRows());
+    	memory.setPageNumber(nextPageIndex);
+        UIViewer uiViewer = new UIViewer();
+        uiViewer.updateView(adresses);
+        uiViewer.getUserInput(this);
     }
 
     public void lastPage() {
-
+    	int lastPageIndex = Pagination.getLastPage(memory);
+    	List<Adress> adresses = getPageElements(lastPageIndex, memory.getRows());
+    	memory.setPageNumber(lastPageIndex);
+        UIViewer uiViewer = new UIViewer();
+        uiViewer.updateView(adresses);
+        uiViewer.getUserInput(this);
     }
 }

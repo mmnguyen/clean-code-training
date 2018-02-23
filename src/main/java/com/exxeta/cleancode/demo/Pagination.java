@@ -6,8 +6,23 @@ public class Pagination {
         return 0;
     }
 
-    public static Integer getNextpage(Memory memory) {
-        // TODO check if last page is reached
-        return memory.getPageNumber() + 1;
+    public static Integer getPreviousPage(Memory memory) {
+    	int currentPageNumberMinusOne = memory.getPageNumber() + 1;
+        if (currentPageNumberMinusOne > 0) {
+        	return currentPageNumberMinusOne;
+        }
+        return memory.getPageNumber();
+    }
+    
+    public static Integer getNextPage(Memory memory) {
+    	int currentPageNumberPlusOne = memory.getPageNumber() + 1;
+        if (currentPageNumberPlusOne < getLastPage(memory)) {
+        	return currentPageNumberPlusOne;
+        }
+        return memory.getPageNumber();
+    }
+    
+    public static Integer getLastPage(Memory memory) {
+    	return memory.getAdresses().size() / memory.getRows();
     }
 }
