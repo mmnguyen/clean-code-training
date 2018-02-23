@@ -4,19 +4,28 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UIViewer {
-	List<Adress> adresses;
-	int nameColumnWidth, cityColumnWidth, streetColumnWidth;
+	static List<Adress> adresses;
+	static int nameColumnWidth, cityColumnWidth, streetColumnWidth;
 	
-	public void updateView(List<Adress> adresses) {
-		this.adresses = adresses;
-		this.getColumnWidths();
-		this.printTable();
-		this.printMenu();
+	public static void updateTableView(List<Adress> adressesArg) {
+		adresses = adressesArg;
+		getColumnWidths();
+		printTable();
+		printMenu();
 	}
 	
-    public void getColumnWidths() {
+    public static void printMenu() {
+    	System.out.println("F)irst	P)rev	N)ext	L)ast	E)xit");
+    }
+    
+    public static void printGoodbye() {
+    	System.out.println("Thanks for using CsvViewer! Godbye :)");
+    }
+	
+	
+    private static void getColumnWidths() {
     	int maxNameLength = 0, maxCityLength = 0, maxStreetLength = 0;
-    	for(Adress adress : this.adresses) {
+    	for(Adress adress : adresses) {
     		if(adress.getName().length() > maxNameLength) {
     			maxNameLength = adress.getName().length();
     		}
@@ -27,12 +36,12 @@ public class UIViewer {
     			maxStreetLength = adress.getStreet().length();
     		}
     	}
-    	this.nameColumnWidth = maxNameLength;
-    	this.cityColumnWidth = maxCityLength;
-    	this.streetColumnWidth = maxStreetLength;
+    	nameColumnWidth = maxNameLength;
+    	cityColumnWidth = maxCityLength;
+    	streetColumnWidth = maxStreetLength;
     }
     
-    public void printTable() {
+    private static void printTable() {
     	//Print first separator line
 		System.out.print("+");
 		System.out.print(new String(new char[nameColumnWidth]).replace("\0", "-"));
@@ -42,7 +51,7 @@ public class UIViewer {
 		System.out.print(new String(new char[streetColumnWidth]).replace("\0", "-"));
 		System.out.println("+");
 		
-    	for(Adress adress : this.adresses) {
+    	for(Adress adress : adresses) {
     		//Print content line
     		System.out.print("|");
     		System.out.print(adress.getName());
@@ -71,44 +80,4 @@ public class UIViewer {
     	}
     }
     
-    public void printMenu() {
-    	System.out.println("F)irst	P)rev	N)ext	L)ast	E)xit");
-    }
-    
-    public void sayGoodbye() {
-    	System.out.println("Thanks for using CsvViewer! Godbye :)");
-    }
-    
-	public void getUserInput(CsvViewer csvViewer) {
-		Scanner scanner = new Scanner(System.in);
-		String userInput = "";
-		userInput = scanner.nextLine();
-        switch (userInput) {
-        	case "F":
-	            csvViewer.firstPage();
-	            scanner.close();
-	            break;
-        	case "P":
-	            csvViewer.previousPage();
-	            scanner.close();
-	            break;
-        	case "N":
-	            csvViewer.nextpage();
-	            scanner.close();
-	            break;
-        	case "L":
-	            csvViewer.lastPage();
-	            scanner.close();
-	            break;
-        	case "E":
-	            this.sayGoodbye();
-	            scanner.close();
-	            break;
-	        default:
-	        	this.printMenu();
-	        	scanner.close();
-	        	break;
-        }
-	}
-	
 }
