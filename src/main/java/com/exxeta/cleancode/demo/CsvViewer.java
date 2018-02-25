@@ -22,43 +22,44 @@ public class CsvViewer {
 
         int rowsPerPage = getRowsNumber(args);
         memory.setRows(rowsPerPage);
-
         List<Adress> adressesOnFirstPage = Pagination.getFirstPageAdresses(memory);
         UIViewer.updateTableView(adressesOnFirstPage);
-        
-		Scanner scanner = new Scanner(System.in);
-		String userInput = "";
-		do {
-			userInput = scanner.nextLine();
-	        switch (userInput.toUpperCase()) {
-	        	case "F":
-		            List<Adress> firstPageAdresses = Pagination.getFirstPageAdresses(memory);
-		            UIViewer.updateTableView(firstPageAdresses);
-		            break;
-	        	case "P":
-		            List<Adress> previousPageAdresses = Pagination.getPreviousPageAdresses(memory);
-		            UIViewer.updateTableView(previousPageAdresses);
-		            break;
-	        	case "N":
-		            List<Adress> nextPageAdresses = Pagination.getNextPageAdresses(memory);
-		            UIViewer.updateTableView(nextPageAdresses);
-		            break;
-	        	case "L":
-		            List<Adress> lastPageAdresses = Pagination.getLastPageAdresses(memory);
-		            UIViewer.updateTableView(lastPageAdresses);
-		            break;
-	        	case "E":
-	        		UIViewer.printGoodbye();
-		            break;
-		        default:
-		        	UIViewer.printMenu();
-		        	break;
-	        }
-		} while (!userInput.equals("E"));
+
+        Scanner scanner = new Scanner(System.in);
+        String userInput = "";
+        do {
+            userInput = scanner.nextLine();
+            switch (userInput.toUpperCase()) {
+                case "F":
+                    List<Adress> firstPageAdresses = Pagination.getFirstPageAdresses(memory);
+                    UIViewer.updateTableView(firstPageAdresses);
+                    break;
+                case "P":
+                    List<Adress> previousPageAdresses = Pagination.getPreviousPageAdresses(memory);
+                    UIViewer.updateTableView(previousPageAdresses);
+                    break;
+                case "N":
+                    List<Adress> nextPageAdresses = Pagination.getNextPageAdresses(memory);
+                    memory.setPageNumber(memory.getPageNumber()+1);
+                    UIViewer.updateTableView(nextPageAdresses);
+                    break;
+                case "L":
+                    List<Adress> lastPageAdresses = Pagination.getLastPageAdresses(memory);
+                    UIViewer.updateTableView(lastPageAdresses);
+                    break;
+                case "E":
+                    scanner.close();
+                    UIViewer.printGoodbye();
+                    break;
+                default:
+                    UIViewer.printMenu();
+                    break;
+            }
+        } while (!userInput.equals("E"));
         scanner.close();
     }
 
-    private String getCsvPath(String [] args) {
+    private String getCsvPath(String[] args) {
         AtomicReference<String> csvPath = new AtomicReference<>("");
         Arrays.stream(args).forEach(s -> {
             if (s.contains("csvpath=")) {
@@ -72,7 +73,7 @@ public class CsvViewer {
         AtomicReference<Integer> rowNumber = new AtomicReference<>(0);
         Arrays.stream(args).forEach(s -> {
             if (s.contains("row=")) {
-                rowNumber.set(Integer.valueOf(s.replace("row=", ""))+1);
+                rowNumber.set(Integer.valueOf(s.replace("row=", "")));
             }
         });
         return rowNumber.get();

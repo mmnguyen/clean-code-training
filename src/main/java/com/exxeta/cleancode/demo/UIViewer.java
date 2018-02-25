@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UIViewer {
-	static List<Adress> adresses;
-	static int nameColumnWidth, cityColumnWidth, streetColumnWidth;
+	private static int nameColumnWidth, cityColumnWidth, streetColumnWidth;
 	
 	public static void updateTableView(List<Adress> adressesArg) {
-		adresses = adressesArg;
-		getColumnWidths();
-		printTable();
+		getColumnWidths(adressesArg);
+		printTable(adressesArg);
 		printMenu();
 	}
 	
@@ -23,7 +21,7 @@ public class UIViewer {
     }
 	
 	
-    private static void getColumnWidths() {
+    private static void getColumnWidths(List<Adress> adresses) {
     	int maxNameLength = 0, maxCityLength = 0, maxStreetLength = 0;
     	for(Adress adress : adresses) {
     		if(adress.getName().length() > maxNameLength) {
@@ -41,7 +39,7 @@ public class UIViewer {
     	streetColumnWidth = maxStreetLength;
     }
     
-    private static void printTable() {
+    private static void printTable(List<Adress> adresses) {
     	//Print first separator line
 		System.out.print("+");
 		System.out.print(new String(new char[nameColumnWidth]).replace("\0", "-"));

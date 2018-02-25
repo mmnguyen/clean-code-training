@@ -21,7 +21,7 @@ public class CsvGenerator {
     private List<String> city = new ArrayList<>(Arrays.asList("Stuttgart", "Karlsruhe", "Berlin", "Cologne", "Munich", "Bremen", "Hannover", "Erfurt", "Frankfurt"));
 
 
-    public void generated (Integer numberofLines) throws IOException {
+    private void generated (Integer numberofLines) throws IOException {
         BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(SAMPLE_CSV_FILE));
         CSVPrinter csvPrinter = new CSVPrinter(bufferedWriter, CSVFormat.DEFAULT.withHeader("name", "street", "city"));
         for (int i = 0; i < numberofLines; i++) {
