@@ -21,12 +21,4 @@ public class CsvReader {
     public static List<CSVRecord> getRecords(String csvPath) throws IOException {
         return readCsv(csvPath).getRecords();
     }
-
-    public List<Adress> getAdresses(List<CSVRecord> csvRecords) {
-        return csvRecords.stream().map(this::mapCsvRecordToAdress).collect(Collectors.toList());
-    }
-
-    private Adress mapCsvRecordToAdress(CSVRecord csvRecord) {
-        return new Adress(csvRecord.get(0), csvRecord.get(1), csvRecord.get(2));
-    }
 }

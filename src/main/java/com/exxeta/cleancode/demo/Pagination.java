@@ -1,17 +1,19 @@
 package com.exxeta.cleancode.demo;
 
+import org.apache.commons.csv.CSVRecord;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pagination {
 
-    public static List<Adress> getFirstPageAdresses(Memory memory) {
+    public static List<CSVRecord> getFirstPageAdresses(Memory memory) {
         memory.setPageNumber(0);
-        return getPageElement(memory);
+        return getPageSize(memory);
     }
 
 
-    public static int getPageElement(int listSize, int currentPage, int pageSize) {
+    private static int getPageSize(int listSize, int currentPage, int pageSize) {
         currentPage ++;
         return Math.min(listSize, Math.abs(currentPage * pageSize));
     }
@@ -25,42 +27,42 @@ public class Pagination {
     }
 
     private static boolean hasPrevious(int listSize, int currentPage, int pageSize) {
-        return getPageElement(listSize, currentPage, pageSize) > 0;
+        return getPageSize(listSize, currentPage, pageSize) > 0;
     }
 
-    public static List<Adress> getPreviousPageAdresses(Memory memory) {
+    public static List<CSVRecord> getPreviousPageAdresses(Memory memory) {
         memory.setPageNumber(memory.getPageNumber()-1);
-        if (!hasPrevious(memory.getAdresses().size(),memory.getPageNumber(), memory.getRows())) {
+        if (!hasPrevious(memory.getCsvRecords().size(),memory.getPageNumber(), memory.getRows())) {
             return new ArrayList<>();
         }
-        return getPageElement(memory);
+        return getPageSize(memory);
     }
 
-    public static List<Adress> getLastPageAdresses(Memory memory) {
-        List<Adress> adressList = new ArrayList<>();
-        int index = memory.getAdresses().size() - memory.getAdresses().size() % memory.getRows();
-        for (int i = index; i < memory.getAdresses().size() ;i++) {
-            adressList.add(memory.getAdresses().get(i));
+    public static List<CSVRecord> getLastPageAdresses(Memory memory) {
+        List<CSVRecord> adressList = new ArrayList<>();
+        int index = memory.getCsvRecords().size() - memory.getCsvRecords().size() % memory.getRows();
+        for (int i = index; i < memory.getCsvRecords().size() ; i++) {
+            adressList.add(memory.getCsvRecords().get(i));
         }
 
         return adressList;
     }
 
-    private static List<Adress> getPageElement(Memory memory) {
-        List<Adress> adressList = new ArrayList<>();
-        int index = getPageElement(memory.getAdresses().size(), memory.getPageNumber(), memory.getRows()) - memory.getRows();
-        for (int i = index; i < getPageElement(memory.getAdresses().size(), memory.getPageNumber(), memory.getRows()); i++) {
-            adressList.add(memory.getAdresses().get(i));
+    private static List<CSVRecord> getPageSize(Memory memory) {
+        List<CSVRecord> adressList = new ArrayList<>();
+        int index = getPageSize(memory.getCsvRecords().size(), memory.getPageNumber(), memory.getRows()) - memory.getRows();
+        for (int i = index; i < getPageSize(memory.getCsvRecords().size(), memory.getPageNumber(), memory.getRows()); i++) {
+            adressList.add(memory.getCsvRecords().get(i));
         }
 
         return adressList;
     }
 
-    public static List<Adress> getNextPageAdresses(Memory memory) {
+    public static List<CSVRecord> getNextPageAdresses(Memory memory) {
         memory.setPageNumber(memory.getPageNumber() + 1);
-        if (!hasNext(memory.getAdresses().size(), memory.getRows())) {
+        if (!hasNext(memory.getCsvRecords().size(), memory.getRows())) {
             return new ArrayList<>();
         }
-        return getPageElement(memory);
+        return getPageSize(memory);
     }
 }

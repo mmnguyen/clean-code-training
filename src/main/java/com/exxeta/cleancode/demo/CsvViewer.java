@@ -3,7 +3,6 @@ package com.exxeta.cleancode.demo;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -15,14 +14,13 @@ public class CsvViewer {
 
     public void startCsvViewer(String[] args) throws IOException {
 
-        String path = getCsvPath(args);
+        String path = "adress.csv";
         List<CSVRecord> csvRecords = CsvReader.getRecords(path);
-        List<Adress> adresses = new CsvReader().getAdresses(csvRecords);
-        memory.setAdresses(adresses);
+        memory.setCsvRecords(csvRecords);
 
         int rowsPerPage = getRowsNumber(args);
         memory.setRows(rowsPerPage);
-        List<Adress> adressesOnFirstPage = Pagination.getFirstPageAdresses(memory);
+        List<CSVRecord> adressesOnFirstPage = Pagination.getFirstPageAdresses(memory);
         UIViewer.updateTableView(adressesOnFirstPage);
 
         Scanner scanner = new Scanner(System.in);
@@ -31,20 +29,20 @@ public class CsvViewer {
             userInput = scanner.nextLine();
             switch (userInput.toUpperCase()) {
                 case "F":
-                    List<Adress> firstPageAdresses = Pagination.getFirstPageAdresses(memory);
+                    List<CSVRecord> firstPageAdresses = Pagination.getFirstPageAdresses(memory);
                     UIViewer.updateTableView(firstPageAdresses);
                     break;
                 case "P":
-                    List<Adress> previousPageAdresses = Pagination.getPreviousPageAdresses(memory);
+                    List<CSVRecord> previousPageAdresses = Pagination.getPreviousPageAdresses(memory);
                     UIViewer.updateTableView(previousPageAdresses);
                     break;
                 case "N":
-                    List<Adress> nextPageAdresses = Pagination.getNextPageAdresses(memory);
+                    List<CSVRecord> nextPageAdresses = Pagination.getNextPageAdresses(memory);
                     memory.setPageNumber(memory.getPageNumber()+1);
                     UIViewer.updateTableView(nextPageAdresses);
                     break;
                 case "L":
-                    List<Adress> lastPageAdresses = Pagination.getLastPageAdresses(memory);
+                    List<CSVRecord> lastPageAdresses = Pagination.getLastPageAdresses(memory);
                     UIViewer.updateTableView(lastPageAdresses);
                     break;
                 case "E":
@@ -60,22 +58,14 @@ public class CsvViewer {
     }
 
     private String getCsvPath(String[] args) {
-        AtomicReference<String> csvPath = new AtomicReference<>("");
-        Arrays.stream(args).forEach(s -> {
-            if (s.contains("csvpath=")) {
-                csvPath.set(s.replace("csvpath=", ""));
-            }
-        });
-        return csvPath.get();
+        return args[0];
     }
 
     private Integer getRowsNumber(String[] args) {
-        AtomicReference<Integer> rowNumber = new AtomicReference<>(0);
-        Arrays.stream(args).forEach(s -> {
-            if (s.contains("row=")) {
-                rowNumber.set(Integer.valueOf(s.replace("row=", "")));
-            }
-        });
-        return rowNumber.get();
+        int row = Memory.DEFAULT_ROWS;
+        if (args.length > 1) {
+            row = Integer.valueOf(args[1]);
+        }
+        return row;
     }
 }

@@ -8,5 +8,5 @@ pogramm variable
 
 row variable
 
-`rows="[number]"`
+`rows="[number]?"`
 

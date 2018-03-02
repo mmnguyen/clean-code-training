@@ -1,12 +1,14 @@
 package com.exxeta.cleancode.demo;
 
+import org.apache.commons.csv.CSVRecord;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class UIViewer {
 	private static int nameColumnWidth, cityColumnWidth, streetColumnWidth;
 	
-	public static void updateTableView(List<Adress> adressesArg) {
+	public static void updateTableView(List<CSVRecord> adressesArg) {
 		getColumnWidths(adressesArg);
 		printTable(adressesArg);
 		printMenu();
@@ -21,17 +23,17 @@ public class UIViewer {
     }
 	
 	
-    private static void getColumnWidths(List<Adress> adresses) {
+    private static void getColumnWidths(List<CSVRecord> adresses) {
     	int maxNameLength = 0, maxCityLength = 0, maxStreetLength = 0;
-    	for(Adress adress : adresses) {
-    		if(adress.getName().length() > maxNameLength) {
-    			maxNameLength = adress.getName().length();
+    	for(CSVRecord adress : adresses) {
+    		if(adress.get(0).length() > maxNameLength) {
+    			maxNameLength = adress.get(0).length();
     		}
-    		if(adress.getCity().length() > maxCityLength) {
-    			maxCityLength = adress.getCity().length();
+    		if(adress.get(0).length() > maxCityLength) {
+    			maxCityLength = adress.get(0).length();
     		}
-    		if(adress.getStreet().length() > maxStreetLength) {
-    			maxStreetLength = adress.getStreet().length();
+    		if(adress.get(0).length() > maxStreetLength) {
+    			maxStreetLength = adress.get(0).length();
     		}
     	}
     	nameColumnWidth = maxNameLength;
@@ -39,7 +41,7 @@ public class UIViewer {
     	streetColumnWidth = maxStreetLength;
     }
     
-    private static void printTable(List<Adress> adresses) {
+    private static void printTable(List<CSVRecord> csvRecords) {
     	//Print first separator line
 		System.out.print("+");
 		System.out.print(new String(new char[nameColumnWidth]).replace("\0", "-"));
@@ -49,23 +51,23 @@ public class UIViewer {
 		System.out.print(new String(new char[streetColumnWidth]).replace("\0", "-"));
 		System.out.println("+");
 		
-    	for(Adress adress : adresses) {
+    	for(CSVRecord csvRecord : csvRecords) {
     		//Print content line
-    		System.out.print("|");
-    		System.out.print(adress.getName());
-    		int numbreOfBlanksToFillNameCell = nameColumnWidth - adress.getName().length();
-    		System.out.print(new String(new char[numbreOfBlanksToFillNameCell]).replace("\0", " "));
-    		
-    		System.out.print("|");
-    		System.out.print(adress.getCity());
-    		int numbreOfBlanksToFillCityCell = cityColumnWidth - adress.getCity().length();
-    		System.out.print(new String(new char[numbreOfBlanksToFillCityCell]).replace("\0", " "));
-    		
-    		System.out.print("|");
-    		System.out.print(adress.getStreet());
-    		int numbreOfBlanksToFillStreetCell = streetColumnWidth - adress.getStreet().length();
-    		System.out.print(new String(new char[numbreOfBlanksToFillStreetCell]).replace("\0", " "));
-    		System.out.println("|");
+//    		System.out.print("|");
+//    		System.out.print(adress.getName());
+//    		int numbreOfBlanksToFillNameCell = nameColumnWidth - adress.getName().length();
+//    		System.out.print(new String(new char[numbreOfBlanksToFillNameCell]).replace("\0", " "));
+//
+//    		System.out.print("|");
+//    		System.out.print(adress.getCity());
+//    		int numbreOfBlanksToFillCityCell = cityColumnWidth - adress.getCity().length();
+//    		System.out.print(new String(new char[numbreOfBlanksToFillCityCell]).replace("\0", " "));
+//
+//    		System.out.print("|");
+//    		System.out.print(adress.getStreet());
+//    		int numbreOfBlanksToFillStreetCell = streetColumnWidth - adress.getStreet().length();
+//    		System.out.print(new String(new char[numbreOfBlanksToFillStreetCell]).replace("\0", " "));
+//    		System.out.println("|");
     		
     		//Print separator line
     		System.out.print("+");

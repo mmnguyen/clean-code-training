@@ -22,9 +22,8 @@ public class CsvReaderTest {
     @Test
     public void getAdresses() throws IOException {
         List<CSVRecord> csvRecords = CsvReader.getRecords("./src/test/resources/adress.csv");
-        List<Adress> adressList = new CsvReader().getAdresses(csvRecords);
-        Assert.assertNotNull(adressList);
-        Assert.assertEquals("Steve", adressList.get(4).getName());
+        Assert.assertNotNull(csvRecords);
+        Assert.assertEquals("Steve", csvRecords.get(4).get(0));
     }
 
 }

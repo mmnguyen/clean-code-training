@@ -1,10 +1,15 @@
 package com.exxeta.cleancode.demo;
 
+import org.apache.commons.csv.CSVRecord;
+
 import java.util.List;
 
 public class Memory {
+
+    public static Integer DEFAULT_ROWS = 5;
+
     private Integer pageNumber;
-    private List<Adress> adresses;
+    private List<CSVRecord> csvRecords;
     private Integer rows;
 
     public Integer getPageNumber() {
@@ -15,14 +20,6 @@ public class Memory {
         this.pageNumber = pageNumber;
     }
 
-    public List<Adress> getAdresses() {
-        return adresses;
-    }
-
-    public void setAdresses(List<Adress> adresses) {
-        this.adresses = adresses;
-    }
-
     public Integer getRows() {
         return rows;
     }
@@ -31,5 +28,11 @@ public class Memory {
         this.rows = rows;
     }
 
+    public List<CSVRecord> getCsvRecords() {
+        return csvRecords;
+    }
 
+    public void setCsvRecords(List<CSVRecord> csvRecords) {
+        this.csvRecords = csvRecords;
+    }
 }
