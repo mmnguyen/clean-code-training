@@ -2,16 +2,19 @@ package com.exxeta.cleancode.demo;
 
 import org.apache.commons.csv.CSVRecord;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class UIViewer {
-	private static int nameColumnWidth, cityColumnWidth, streetColumnWidth;
 	
-	public static void updateTableView(List<CSVRecord> adressesArg) {
-		getColumnWidths(adressesArg);
-		printTable(adressesArg);
-		printMenu();
+	public static void updateTableView(List<CSVRecord> records) {
+		List<Integer> columnWidths = getColumnWidths(records);
+		List<String> table = createTable(records, columnWidths);
+		printRows(table);
+		List<String> menu = createMenu();
+		printRows(menu);
 	}
 	
     public static void printMenu() {
@@ -23,61 +26,58 @@ public class UIViewer {
     }
 	
 	
-    private static void getColumnWidths(List<CSVRecord> adresses) {
-    	int maxNameLength = 0, maxCityLength = 0, maxStreetLength = 0;
-    	for(CSVRecord adress : adresses) {
-    		if(adress.get(0).length() > maxNameLength) {
-    			maxNameLength = adress.get(0).length();
-    		}
-    		if(adress.get(0).length() > maxCityLength) {
-    			maxCityLength = adress.get(0).length();
-    		}
-    		if(adress.get(0).length() > maxStreetLength) {
-    			maxStreetLength = adress.get(0).length();
+    private static List<Integer> getColumnWidths(List<CSVRecord> records) {
+    	int numberOfColumns = records.get(0).size();
+    	List<Integer> columnWidths = new ArrayList<Integer>(Collections.nCopies(numberOfColumns, 0));
+    	
+    	for(CSVRecord record : records) {
+    		for(int i = 0; i<record.size(); i++) {
+    			if(record.get(i).length() > columnWidths.get(i)) {
+    				columnWidths.set(i, record.get(i).length());
+    			}
     		}
     	}
-    	nameColumnWidth = maxNameLength;
-    	cityColumnWidth = maxCityLength;
-    	streetColumnWidth = maxStreetLength;
+    	return columnWidths;
     }
     
-    private static void printTable(List<CSVRecord> csvRecords) {
-    	//Print first separator line
-		System.out.print("+");
-		System.out.print(new String(new char[nameColumnWidth]).replace("\0", "-"));
-		System.out.print("+");
-		System.out.print(new String(new char[cityColumnWidth]).replace("\0", "-"));
-		System.out.print("+");
-		System.out.print(new String(new char[streetColumnWidth]).replace("\0", "-"));
-		System.out.println("+");
-		
-    	for(CSVRecord csvRecord : csvRecords) {
-    		//Print content line
-//    		System.out.print("|");
-//    		System.out.print(adress.getName());
-//    		int numbreOfBlanksToFillNameCell = nameColumnWidth - adress.getName().length();
-//    		System.out.print(new String(new char[numbreOfBlanksToFillNameCell]).replace("\0", " "));
-//
-//    		System.out.print("|");
-//    		System.out.print(adress.getCity());
-//    		int numbreOfBlanksToFillCityCell = cityColumnWidth - adress.getCity().length();
-//    		System.out.print(new String(new char[numbreOfBlanksToFillCityCell]).replace("\0", " "));
-//
-//    		System.out.print("|");
-//    		System.out.print(adress.getStreet());
-//    		int numbreOfBlanksToFillStreetCell = streetColumnWidth - adress.getStreet().length();
-//    		System.out.print(new String(new char[numbreOfBlanksToFillStreetCell]).replace("\0", " "));
-//    		System.out.println("|");
-    		
-    		//Print separator line
-    		System.out.print("+");
-    		System.out.print(new String(new char[nameColumnWidth]).replace("\0", "-"));
-    		System.out.print("+");
-    		System.out.print(new String(new char[cityColumnWidth]).replace("\0", "-"));
-    		System.out.print("+");
-    		System.out.print(new String(new char[streetColumnWidth]).replace("\0", "-"));
-    		System.out.println("+");
+    private static List<String> createTable(List<CSVRecord> records, List<Integer> columnWidths) {
+    	List<String> table = new ArrayList<>();
+    	table.add(createSeparatorRow(columnWidths));
+    	for(CSVRecord record : records) {
+    		String row = "";
+    		for(int i = 0; i < record.size(); i++) {
+        		row += "|";
+        		row += record.get(i);
+        		int numbreOfBlanksToFillCell = columnWidths.get(i) - record.get(i).length();
+        		row += new String(new char[numbreOfBlanksToFillCell]).replace("\0", " ");
+    		}
+    		row += "|";
+    		table.add(row);
+    		table.add(createSeparatorRow(columnWidths));
     	}
+    	return table;
     }
+
+	private static String createSeparatorRow(List<Integer> columnWidths) {
+		String separatorLine = "";
+		for(int i = 0; i < columnWidths.size(); i++) {
+			separatorLine += "+";
+			separatorLine += new String(new char[columnWidths.get(i)]).replace("\0", "-");
+    	}
+		separatorLine += "+";
+		return separatorLine;
+	}
+	
+	private static List<String> createMenu(){
+		List<String> menu = new ArrayList<>();
+		menu.add("F)irst	P)rev	N)ext	L)ast	E)xit");
+		return menu;
+	}
+	
+	private static void printRows(List<String> rows) {
+		for(String row : rows) {
+			System.out.println(row);
+		}
+	}
     
 }
