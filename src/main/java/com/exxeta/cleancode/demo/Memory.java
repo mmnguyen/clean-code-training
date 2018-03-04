@@ -8,24 +8,15 @@ public class Memory {
 
     public static Integer DEFAULT_ROWS = 5;
 
-    private Integer pageNumber;
     private List<CSVRecord> csvRecords;
-    private Integer rows;
+    private Integer rowsPerPage;
 
-    public Integer getPageNumber() {
-        return pageNumber;
+    public Integer getRowsPerPage() {
+        return rowsPerPage;
     }
 
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public Integer getRows() {
-        return rows;
-    }
-
-    public void setRows(Integer rows) {
-        this.rows = rows;
+    public void setRowsPerPage(Integer rows) {
+        this.rowsPerPage = rows;
     }
 
     public List<CSVRecord> getCsvRecords() {

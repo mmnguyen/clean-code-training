@@ -20,7 +20,7 @@ public class CsvViewer {
 		
 		//Store rows per page param
 		int rowsPerPage = getRowsNumber(args);
-		memory.setRows(rowsPerPage);
+		memory.setRowsPerPage(rowsPerPage);
 		
 		//Print first page
 		List<CSVRecord> firstPageRecords = pagination.firstPage(memory);

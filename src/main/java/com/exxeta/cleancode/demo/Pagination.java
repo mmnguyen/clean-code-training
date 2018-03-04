@@ -7,19 +7,19 @@ import java.util.List;
 
 public class Pagination {
 	
-	private Integer currtentPageNumber;
+	private Integer currtentPageIndex;
 
-    public Integer getCurrtentPageNumber() {
-		return currtentPageNumber;
+    public Integer getCurrtentPageIndex() {
+		return currtentPageIndex;
 	}
 
-	public void setCurrtentPageNumber(Integer currtentPageNumber) {
-		this.currtentPageNumber = currtentPageNumber;
+	public void setCurrtentPageIndex(Integer currtentPageIndex) {
+		this.currtentPageIndex = currtentPageIndex;
 	}
 
 	public List<CSVRecord> firstPage(Memory memory) {
     	List<CSVRecord> firstPageRecords = null;
-    	int rowsPerPage = memory.getRows();
+    	int rowsPerPage = memory.getRowsPerPage();
     	int numberOfAllRecords = memory.getCsvRecords().size();
     	
     	if(numberOfAllRecords >= rowsPerPage) {
@@ -31,19 +31,19 @@ public class Pagination {
     		firstPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(0, indexOfLastRecordOnFirstPage+1));
     	}
     	
-    	currtentPageNumber = 0;
+    	currtentPageIndex = 0;
         return firstPageRecords;
     }
     
     public List<CSVRecord> previousPage(Memory memory) {
     	List<CSVRecord> previousPageRecords = null;
-    	int rowsPerPage = memory.getRows();
-    	int indexOfFirstRecordOnCurrentPage = currtentPageNumber * rowsPerPage - rowsPerPage;
+    	int rowsPerPage = memory.getRowsPerPage();
+    	int indexOfFirstRecordOnCurrentPage = (currtentPageIndex + 1) * rowsPerPage - rowsPerPage;
     	int indexOfFirstRecordOnPreviousPage = indexOfFirstRecordOnCurrentPage - rowsPerPage;
     	
-    	if(currtentPageNumber > 1) {
+    	if(currtentPageIndex > 1) {
     		previousPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfFirstRecordOnPreviousPage, indexOfFirstRecordOnCurrentPage));
-    		currtentPageNumber -= 1;
+    		currtentPageIndex -= 1;
     	}
     	else {
     		previousPageRecords = firstPage(memory);
@@ -54,14 +54,14 @@ public class Pagination {
     
     public List<CSVRecord> nextPage(Memory memory) {
     	List<CSVRecord> nextPageRecords = null;
-    	int rowsPerPage = memory.getRows();
+    	int rowsPerPage = memory.getRowsPerPage();
     	int numberOfAllRecords = memory.getCsvRecords().size();
-    	int indexOfLastRecordOnCurrentPage = currtentPageNumber * rowsPerPage;
+    	int indexOfLastRecordOnCurrentPage = (currtentPageIndex + 1) * rowsPerPage - 1;
     	int indexOfLastRecordOnNextPage = indexOfLastRecordOnCurrentPage + rowsPerPage;
     	
     	if(numberOfAllRecords > indexOfLastRecordOnNextPage + 1) {
     		nextPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfLastRecordOnCurrentPage+1, indexOfLastRecordOnNextPage+1));
-    		currtentPageNumber += 1;
+    		currtentPageIndex += 1;
     	}
     	else {
     		nextPageRecords = lastPage(memory);
@@ -72,7 +72,7 @@ public class Pagination {
 
     public List<CSVRecord> lastPage(Memory memory) {
     	List<CSVRecord> lastPageRecords = null;
-    	int rowsPerPage = memory.getRows();
+    	int rowsPerPage = memory.getRowsPerPage();
     	int numberOfAllRecords = memory.getCsvRecords().size();
     	int leftOverRecords = numberOfAllRecords % rowsPerPage;
     	
@@ -85,7 +85,7 @@ public class Pagination {
     		lastPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfFirstRecordOnLastPage, numberOfAllRecords));
     	}
     	
-    	currtentPageNumber = (int)Math.ceil((float)numberOfAllRecords / rowsPerPage);
+    	currtentPageIndex = (int)Math.ceil((float)numberOfAllRecords / rowsPerPage);
         return lastPageRecords;
     }
 

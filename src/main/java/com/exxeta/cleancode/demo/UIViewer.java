@@ -55,9 +55,16 @@ public final class UIViewer {
 		System.out.println("Thanks for using CsvViewer! Godbye :)");
 	}
 
-	private List<Integer> getColumnWidths(List<CSVRecord> records) {
-		int numberOfColumns = records.get(0).size();
-		List<Integer> columnWidths = new ArrayList<Integer>(Collections.nCopies(numberOfColumns, 0));
+	public List<Integer> getColumnWidths(List<CSVRecord> records) {
+		int numberOfColumns;
+		List<Integer> columnWidths;
+		if(records.size()>0) {
+			numberOfColumns = records.get(0).size();
+			columnWidths = new ArrayList<Integer>(Collections.nCopies(numberOfColumns, 0));
+		}
+		else {
+			return null;
+		}
 
 		for (CSVRecord record : records) {
 			for (int i = 0; i < record.size(); i++) {
