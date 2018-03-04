@@ -9,34 +9,35 @@ import java.util.function.Consumer;
 public class CsvViewer {
 
 	private Memory memory = new Memory();
+	private Pagination pagination = new Pagination();
 	private Boolean stopApplication;
 
 	public void startCsvViewer(String[] args) throws IOException {
-		// Read and store csv
+		//Read and store csv
 		String filePath = getCsvPath(args);
 		List<CSVRecord> csvRecords = CsvReader.getRecords(filePath);
 		memory.setCsvRecords(csvRecords);
-
-		// Store rows per page param
+		
+		//Store rows per page param
 		int rowsPerPage = getRowsNumber(args);
 		memory.setRows(rowsPerPage);
-
-		// Print first page
-		List<CSVRecord> firstPageRecords = Pagination.getFirstPageAdresses(memory);
+		
+		//Print first page
+		List<CSVRecord> firstPageRecords = pagination.firstPage(memory);
 		UIViewer.getInstance().printTableView(firstPageRecords);
 
-		// Read-process-print loop
+		//Read-process-print loop
 		stopApplication = false;
 		do {
 			String userInput = UIViewer.getInstance().getUserInput();
 			processUserInput(userInput, memory, (List<CSVRecord> result) -> {
-				// onSuccess
+				//onSuccess
 				UIViewer.getInstance().printTableView(result);
 			}, () -> {
-				// onError
+				//onError
 				UIViewer.getInstance().printMenu();
 			}, () -> {
-				// onExit
+				//onExit
 				UIViewer.getInstance().applicationStop();
 				stopApplication = true;
 			});
@@ -55,24 +56,23 @@ public class CsvViewer {
 		}
 		return row;
 	}
-
-	private void processUserInput(String userInput, Memory memory, Consumer<List<CSVRecord>> onSuccess,
-			Runnable onError, Runnable onExit) {
+	
+	private void processUserInput(String userInput, Memory memory, Consumer<List<CSVRecord>> onSuccess, Runnable onError, Runnable onExit) {
 		switch (userInput.toUpperCase()) {
 		case "F":
-			List<CSVRecord> firstPageRecords = Pagination.getFirstPageAdresses(memory);
+			List<CSVRecord> firstPageRecords = pagination.firstPage(memory);
 			onSuccess.accept(firstPageRecords);
 			break;
 		case "P":
-			List<CSVRecord> previousPageRecords = Pagination.getPreviousPageAdresses(memory);
+			List<CSVRecord> previousPageRecords = pagination.previousPage(memory);
 			onSuccess.accept(previousPageRecords);
 			break;
 		case "N":
-			List<CSVRecord> nextPageRecords = Pagination.getNextPageAdresses(memory);
+			List<CSVRecord> nextPageRecords = pagination.nextPage(memory);
 			onSuccess.accept(nextPageRecords);
 			break;
 		case "L":
-			List<CSVRecord> lastPageRecords = Pagination.getLastPageAdresses(memory);
+			List<CSVRecord> lastPageRecords = pagination.lastPage(memory);
 			onSuccess.accept(lastPageRecords);
 			break;
 		case "E":

@@ -6,63 +6,87 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pagination {
+	
+	private Integer currtentPageNumber;
 
-    public static List<CSVRecord> getFirstPageAdresses(Memory memory) {
-        memory.setPageNumber(0);
-        return getPageSize(memory);
+    public Integer getCurrtentPageNumber() {
+		return currtentPageNumber;
+	}
+
+	public void setCurrtentPageNumber(Integer currtentPageNumber) {
+		this.currtentPageNumber = currtentPageNumber;
+	}
+
+	public List<CSVRecord> firstPage(Memory memory) {
+    	List<CSVRecord> firstPageRecords = null;
+    	int rowsPerPage = memory.getRows();
+    	int numberOfAllRecords = memory.getCsvRecords().size();
+    	
+    	if(numberOfAllRecords >= rowsPerPage) {
+    		int indexOfLastRecordOnFirstPage = rowsPerPage;
+    		firstPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(0, indexOfLastRecordOnFirstPage));
+    	}
+    	else {
+    		int indexOfLastRecordOnFirstPage = numberOfAllRecords - 1;
+    		firstPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(0, indexOfLastRecordOnFirstPage+1));
+    	}
+    	
+    	currtentPageNumber = 0;
+        return firstPageRecords;
+    }
+    
+    public List<CSVRecord> previousPage(Memory memory) {
+    	List<CSVRecord> previousPageRecords = null;
+    	int rowsPerPage = memory.getRows();
+    	int indexOfFirstRecordOnCurrentPage = currtentPageNumber * rowsPerPage - rowsPerPage;
+    	int indexOfFirstRecordOnPreviousPage = indexOfFirstRecordOnCurrentPage - rowsPerPage;
+    	
+    	if(currtentPageNumber > 1) {
+    		previousPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfFirstRecordOnPreviousPage, indexOfFirstRecordOnCurrentPage));
+    		currtentPageNumber -= 1;
+    	}
+    	else {
+    		previousPageRecords = firstPage(memory);
+    	}
+    	
+        return previousPageRecords;
+    }
+    
+    public List<CSVRecord> nextPage(Memory memory) {
+    	List<CSVRecord> nextPageRecords = null;
+    	int rowsPerPage = memory.getRows();
+    	int numberOfAllRecords = memory.getCsvRecords().size();
+    	int indexOfLastRecordOnCurrentPage = currtentPageNumber * rowsPerPage;
+    	int indexOfLastRecordOnNextPage = indexOfLastRecordOnCurrentPage + rowsPerPage;
+    	
+    	if(numberOfAllRecords > indexOfLastRecordOnNextPage + 1) {
+    		nextPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfLastRecordOnCurrentPage+1, indexOfLastRecordOnNextPage+1));
+    		currtentPageNumber += 1;
+    	}
+    	else {
+    		nextPageRecords = lastPage(memory);
+    	}
+    	
+        return nextPageRecords;
     }
 
-
-    private static int getPageSize(int listSize, int currentPage, int pageSize) {
-        currentPage ++;
-        return Math.min(listSize, Math.abs(currentPage * pageSize));
+    public List<CSVRecord> lastPage(Memory memory) {
+    	List<CSVRecord> lastPageRecords = null;
+    	int rowsPerPage = memory.getRows();
+    	int numberOfAllRecords = memory.getCsvRecords().size();
+    	int leftOverRecords = numberOfAllRecords % rowsPerPage;
+    	
+    	if(leftOverRecords==0) {
+    		int indexOfFirstRecordOnLastPage = numberOfAllRecords-rowsPerPage;
+			lastPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfFirstRecordOnLastPage, numberOfAllRecords));
+    	}
+    	else {
+    		int indexOfFirstRecordOnLastPage = numberOfAllRecords-leftOverRecords;
+    		lastPageRecords = new ArrayList<CSVRecord>(memory.getCsvRecords().subList(indexOfFirstRecordOnLastPage, numberOfAllRecords));
+    	}
+    	
+    	currtentPageNumber = (int)Math.ceil((float)numberOfAllRecords / rowsPerPage);
+        return lastPageRecords;
     }
 
-    private static int getEndPage(int listSize, int pageSize) {
-        return Math.min(pageSize, listSize);
-    }
-
-    private static boolean hasNext(int listSize, int pageSize) {
-        return getEndPage(pageSize, listSize) < listSize;
-    }
-
-    private static boolean hasPrevious(int listSize, int currentPage, int pageSize) {
-        return getPageSize(listSize, currentPage, pageSize) > 0;
-    }
-
-    public static List<CSVRecord> getPreviousPageAdresses(Memory memory) {
-        memory.setPageNumber(memory.getPageNumber()-1);
-        if (!hasPrevious(memory.getCsvRecords().size(),memory.getPageNumber(), memory.getRows())) {
-            return new ArrayList<>();
-        }
-        return getPageSize(memory);
-    }
-
-    public static List<CSVRecord> getLastPageAdresses(Memory memory) {
-        List<CSVRecord> adressList = new ArrayList<>();
-        int index = memory.getCsvRecords().size() - memory.getCsvRecords().size() % memory.getRows();
-        for (int i = index; i < memory.getCsvRecords().size() ; i++) {
-            adressList.add(memory.getCsvRecords().get(i));
-        }
-
-        return adressList;
-    }
-
-    private static List<CSVRecord> getPageSize(Memory memory) {
-        List<CSVRecord> adressList = new ArrayList<>();
-        int index = getPageSize(memory.getCsvRecords().size(), memory.getPageNumber(), memory.getRows()) - memory.getRows();
-        for (int i = index; i < getPageSize(memory.getCsvRecords().size(), memory.getPageNumber(), memory.getRows()); i++) {
-            adressList.add(memory.getCsvRecords().get(i));
-        }
-
-        return adressList;
-    }
-
-    public static List<CSVRecord> getNextPageAdresses(Memory memory) {
-        memory.setPageNumber(memory.getPageNumber() + 1);
-        if (!hasNext(memory.getCsvRecords().size(), memory.getRows())) {
-            return new ArrayList<>();
-        }
-        return getPageSize(memory);
-    }
 }
