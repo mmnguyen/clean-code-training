@@ -16,14 +16,14 @@ public class CsvReaderTest {
         String adressURL = "./src/test/resources/adress.csv";
         List<CSVRecord> csvRecords = CsvReader.getRecords(adressURL);
         Assert.assertNotNull(csvRecords);
-        Assert.assertEquals("Steve", csvRecords.get(4).get(0));
+        Assert.assertEquals("4Steve", csvRecords.get(4).get(0));
     }
 
     @Test
     public void getAdresses() throws IOException {
         List<CSVRecord> csvRecords = CsvReader.getRecords("./src/test/resources/adress.csv");
         Assert.assertNotNull(csvRecords);
-        Assert.assertEquals("Steve", csvRecords.get(4).get(0));
+        Assert.assertEquals("4Steve", csvRecords.get(4).get(0));
     }
 
 }
