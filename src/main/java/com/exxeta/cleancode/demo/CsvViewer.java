@@ -12,11 +12,18 @@ public class CsvViewer {
 	private Pagination pagination = new Pagination();
 	private Boolean stopApplication;
 
+	private List<CSVRecord> getRecordswithoutHeader(List<CSVRecord> csvRecords) {
+		this.memory.setHeaderLine(csvRecords.get(0));
+		csvRecords.remove(memory.getHeaderLine());
+		return csvRecords;
+	}
+
 	public void startCsvViewer(String[] args) throws IOException {
 		//Read and store csv
 		String filePath = getCsvPath(args);
 		List<CSVRecord> csvRecords = CsvReader.getRecords(filePath);
-		memory.setCsvRecords(csvRecords);
+		List<CSVRecord> recordsWithoutHeader = getRecordswithoutHeader(csvRecords);
+		memory.setCsvRecords(recordsWithoutHeader);
 		
 		//Store rows per page param
 		int rowsPerPage = getRowsNumber(args);
@@ -24,7 +31,7 @@ public class CsvViewer {
 		
 		//Print first page
 		List<CSVRecord> firstPageRecords = pagination.firstPage(memory);
-		UIViewer.getInstance().printTableView(firstPageRecords);
+		UIViewer.getInstance().printTableView(firstPageRecords, memory.getHeaderLine());
 
 		//Read-process-print loop
 		stopApplication = false;
@@ -32,7 +39,7 @@ public class CsvViewer {
 			String userInput = UIViewer.getInstance().getUserInput();
 			processUserInput(userInput, memory, (List<CSVRecord> result) -> {
 				//onSuccess
-				UIViewer.getInstance().printTableView(result);
+				UIViewer.getInstance().printTableView(result, memory.getHeaderLine());
 			}, () -> {
 				//onError
 				UIViewer.getInstance().printMenu();
@@ -53,6 +60,9 @@ public class CsvViewer {
 		int row = Memory.DEFAULT_ROWS;
 		if (args.length > 1) {
 			row = Integer.valueOf(args[1]);
+		}
+		if (memory.getCsvRecords().size() < row) {
+			row = memory.getCsvRecords().size();
 		}
 		return row;
 	}

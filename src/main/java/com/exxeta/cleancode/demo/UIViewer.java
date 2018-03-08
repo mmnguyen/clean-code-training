@@ -34,7 +34,8 @@ public final class UIViewer {
 		return userInput;
 	}
 
-	public void printTableView(List<CSVRecord> records) {
+	public void printTableView(List<CSVRecord> records, CSVRecord header) {
+		records.add(0,header);
 		List<Integer> columnWidths = getColumnWidths(records);
 		List<String> table = createTable(records, columnWidths);
 		printRows(table);
@@ -80,15 +81,15 @@ public final class UIViewer {
 		List<String> table = new ArrayList<>();
 		table.add(createSeparatorRow(columnWidths));
 		for (CSVRecord record : records) {
-			String row = "";
+			StringBuilder row = new StringBuilder();
 			for (int i = 0; i < record.size(); i++) {
-				row += "|";
-				row += record.get(i);
+				row.append("|");
+				row.append(record.get(i));
 				int numbreOfBlanksToFillCell = columnWidths.get(i) - record.get(i).length();
-				row += new String(new char[numbreOfBlanksToFillCell]).replace("\0", " ");
+				row.append(new String(new char[numbreOfBlanksToFillCell]).replace("\0", " "));
 			}
-			row += "|";
-			table.add(row);
+			row.append("|");
+			table.add(row.toString());
 			table.add(createSeparatorRow(columnWidths));
 		}
 		return table;
