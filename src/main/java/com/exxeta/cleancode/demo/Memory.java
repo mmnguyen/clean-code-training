@@ -9,6 +9,7 @@ public class Memory {
     public static Integer DEFAULT_ROWS = 5;
 
     private List<CSVRecord> csvRecords;
+    private CSVRecord headerLine;
     private Integer rowsPerPage;
 
     public Integer getRowsPerPage() {
@@ -17,6 +18,14 @@ public class Memory {
 
     public void setRowsPerPage(Integer rows) {
         this.rowsPerPage = rows;
+    }
+
+    public CSVRecord getHeaderLine() {
+        return headerLine;
+    }
+
+    public void setHeaderLine(CSVRecord headerLine) {
+        this.headerLine = headerLine;
     }
 
     public List<CSVRecord> getCsvRecords() {
